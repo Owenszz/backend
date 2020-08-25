@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-	@Entity
-	public class Categoria implements Serializable{
+
+@Entity
+public class Produto implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -19,18 +22,24 @@ import javax.persistence.ManyToMany;
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
+	private double preco;
 	
-	@ManyToMany(mappedBy = "categorias")
-	private List<Produto> produtos = new ArrayList<>();
+	@ManyToMany
+	@JoinTable(name = "PRODUT0_CATEGORIA", 
+	joinColumns = @JoinColumn(name = "produtos_id"), 
+	inverseJoinColumns = @JoinColumn(name = "categoria_id")
+	)
+	private List<Categoria> categorias = new ArrayList<>();
 	
-	public Categoria () {
+	public Produto () {
 		
 	}
 
-	public Categoria(Integer id, String name) {
+	public Produto(Integer id, String name, double preco) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.preco = preco;
 	}
 
 	public Integer getId() {
@@ -48,14 +57,23 @@ import javax.persistence.ManyToMany;
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<Produto> getProdutos() {
-		return produtos;
+
+	public double getPreco() {
+		return preco;
 	}
 
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
+	public void setPreco(double preco) {
+		this.preco = preco;
 	}
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -72,7 +90,7 @@ import javax.persistence.ManyToMany;
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Categoria other = (Categoria) obj;
+		Produto other = (Produto) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -80,5 +98,5 @@ import javax.persistence.ManyToMany;
 			return false;
 		return true;
 	}
-		
+	
 }
