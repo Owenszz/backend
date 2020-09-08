@@ -27,11 +27,11 @@ public class Endereco implements Serializable{
 	
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "CLIENTE_ID")
+	@JoinColumn(name = "cliente_id")
 	private Cliente cliente;
 	
 	@ManyToOne
-	@JoinColumn(name = "CIDADE_ID")
+	@JoinColumn(name = "cidade_id")
 	private Cidade cidade;
 	
 	public Endereco() {

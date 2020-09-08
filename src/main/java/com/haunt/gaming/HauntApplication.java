@@ -13,6 +13,7 @@ import com.haunt.gaming.domain.Cidade;
 import com.haunt.gaming.domain.Cliente;
 import com.haunt.gaming.domain.Endereco;
 import com.haunt.gaming.domain.Estado;
+import com.haunt.gaming.domain.ItemPedido;
 import com.haunt.gaming.domain.Pagamento;
 import com.haunt.gaming.domain.PagamentoComBoleto;
 import com.haunt.gaming.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.haunt.gaming.repositories.CidadeRepository;
 import com.haunt.gaming.repositories.ClienteRepository;
 import com.haunt.gaming.repositories.EnderecoRepository;
 import com.haunt.gaming.repositories.EstadoRepository;
+import com.haunt.gaming.repositories.ItemPedidoRepository;
 import com.haunt.gaming.repositories.PagamentoRepository;
 import com.haunt.gaming.repositories.PedidoRepository;
 import com.haunt.gaming.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class HauntApplication implements CommandLineRunner {
 	private PedidoRepository pedidorepository;
 	@Autowired
 	private PagamentoRepository pagamentorepository;
+	@Autowired
+	private ItemPedidoRepository itempedidorepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(HauntApplication.class, args);
@@ -118,7 +122,18 @@ public class HauntApplication implements CommandLineRunner {
 		
 		pedidorepository.saveAll(Arrays.asList(ped1,ped2));
 		pagamentorepository.saveAll(Arrays.asList(pagto1,pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 2000.00, 1, 0.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 80.00, 2, 0.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 800.00, 1, 100.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+		
+		p1.getItens().add(ip1);
+		p2.getItens().add(ip3);
+		p3.getItens().add(ip2);
+		
+		itempedidorepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 	}
-
-	
 }
