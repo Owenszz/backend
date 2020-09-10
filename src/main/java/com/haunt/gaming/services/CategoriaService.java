@@ -3,10 +3,12 @@ package com.haunt.gaming.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.haunt.gaming.domain.Categoria;
 import com.haunt.gaming.repositories.CategoriaRepository;
+import com.haunt.gaming.services.exception.DataIntegrityException;
 import com.haunt.gaming.services.exception.ObjectNotFoundException;
 
 @Service
@@ -29,5 +31,15 @@ public class CategoriaService {
 	public Categoria update(Categoria obj) {
 		find(obj.getId());
 		return repo.save(obj);
+	}
+	
+	public void delete(Integer id) {
+		find(id);
+		try {
+		repo.deleteById(id);
+		}
+		catch(DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Não é possivel excluir uma Categoria que possui Produtos");
+		}
 	}
 }
